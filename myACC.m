@@ -1,83 +1,83 @@
-%%  µ÷ÓÃËµÃ÷    20181215  version1@lotus
-%  [ACC,PRE,SEN,F1_score,MCC] = myACC_2(Ô¤²â·ÖÊı,Ô­Ê¼±ê×¼´ğ°¸,method)
+%%  è°ƒç”¨è¯´æ˜    20181230  version2@lotus
+%  [ACC,PRE,SEN,F1_score,MCC] = myACC_2(é¢„æµ‹åˆ†æ•°,åŸå§‹æ ‡å‡†ç­”æ¡ˆ,method)
 %  method='sp0.99'or'sp0.95'or 'youden'or 'accMAX' or 'f1sMAX'
 
-        % methodÒ»°ã¶¼ÊÇÓÃsp0.99ºÍsp0.95
-        %'sp0.99'or'sp0.95'£ºÒÔsp=0.99»ò0.95×÷ÎªãĞÖµÇó½â ¡£%ÕÒµ½×î½Ó½üFPR_value=0.01»ò0.05µÄÎ»ÖÃ
-        %'youden'£ºÓÃYoudenÔ¼µÇÖ¸Êı¶¨ãĞÖµ,¼´µ±TPR-FPRÈ¡×î´óÖµÊ±¡£Ô¼µÈÓÚÇó×î¿¿½ü×óÉÏ½ÇµÄµãÊ±µÄãĞÖµ
-        %'accMAX'£ºÓÃACC×î´óÖµ¶¨ãĞÖµ
-        %'f1sMAX':ÓÃF1_score×î´óÖµ¶¨ãĞÖµ
+        % methodä¸€èˆ¬éƒ½æ˜¯ç”¨sp0.99å’Œsp0.95
+        %'sp0.99'or'sp0.95'ï¼šä»¥sp=0.99æˆ–0.95ä½œä¸ºé˜ˆå€¼æ±‚è§£ ã€‚%æ‰¾åˆ°æœ€æ¥è¿‘FPR_value=0.01æˆ–0.05çš„ä½ç½®
+        %'youden'ï¼šç”¨Youdençº¦ç™»æŒ‡æ•°å®šé˜ˆå€¼,å³å½“TPR-FPRå–æœ€å¤§å€¼æ—¶ã€‚çº¦ç­‰äºæ±‚æœ€é è¿‘å·¦ä¸Šè§’çš„ç‚¹æ—¶çš„é˜ˆå€¼
+        %'accMAX'ï¼šç”¨ACCæœ€å¤§å€¼å®šé˜ˆå€¼
+        %'f1sMAX':ç”¨F1_scoreæœ€å¤§å€¼å®šé˜ˆå€¼
 
 function [ACC,PRE,SEN,F1_score,MCC] = myACC( output,original,method )
       
    
-    %% ¼ì²éÊÇ·ñÒÑ½«¾ØÕó±ä³ÉÒ»ÁĞ
+    %% æ£€æŸ¥æ˜¯å¦å·²å°†çŸ©é˜µå˜æˆä¸€åˆ—
     output=output(:);
     original=original(:);
 
-    %% Í³¼ÆÕıÀàºÍ¸ºÀà¸öÊı
-    count1=length(find(original==1));  %ÕıÀà¸öÊı=TP+FN=ÕæÑô+¼ÙÒõ
-    count0=length(find(original==0));  %¸ºÀà¸öÊı=FP+TN=¼ÙÑô+ÕæÒõ
+    %% ç»Ÿè®¡æ­£ç±»å’Œè´Ÿç±»ä¸ªæ•°
+    count1=length(find(original==1));  %æ­£ç±»ä¸ªæ•°=TP+FN=çœŸé˜³+å‡é˜´
+    count0=length(find(original==0));  %è´Ÿç±»ä¸ªæ•°=FP+TN=å‡é˜³+çœŸé˜´
 
-    [tpr,fpr,thresholds] = roc(original(:)',output(:)');  %[ÕæÑôÂÊ£¬¼ÙÑôÂÊ,ãĞÖµ]
-    TP=count1*tpr;  %TP£ºÕæÑôÀà¸öÊı¡£
-    FP=count0*fpr;  %FP£º¼ÙÑôÀà¸öÊı
-    ACC= (TP+count0-FP)/(count1+count0);  %×¼È·ÂÊACC=(TP+TN)/all=(ÕæÑô+ÕæÒõ)/all  ,ÕæÒõTN=count0-¼ÙÑôFP
-    F1_score=2*TP./(TP+count1);  %F1·ÖÊı=2P*R/(P+R)£¬¾«È·ÂÊP £¬Ãô¸Ğ¶ÈR
+    [tpr,fpr,thresholds] = roc(original(:)',output(:)');  %[çœŸé˜³ç‡ï¼Œå‡é˜³ç‡,é˜ˆå€¼]
+    TP=count1*tpr;  %TPï¼šçœŸé˜³ç±»ä¸ªæ•°ã€‚
+    FP=count0*fpr;  %FPï¼šå‡é˜³ç±»ä¸ªæ•°
+    ACC= (TP+count0-FP)/(count1+count0);  %å‡†ç¡®ç‡ACC=(TP+TN)/all=(çœŸé˜³+çœŸé˜´)/all  ,çœŸé˜´TN=count0-å‡é˜³FP
+    F1_score=2*TP./(TP+count1);  %F1åˆ†æ•°=2P*R/(P+R)ï¼Œç²¾ç¡®ç‡P ï¼Œæ•æ„Ÿåº¦R
 
-    %% Ñ¡ÔñÒ»ÖÖ·½·¨¾ö¶¨ãĞÖµ  
-        % method='sp0.99'£¬'sp0.95'£¬ 'youden'£¬'accMAX'ËÄÖÖ
+    %% é€‰æ‹©ä¸€ç§æ–¹æ³•å†³å®šé˜ˆå€¼  
+        % method='sp0.99'ï¼Œ'sp0.95'ï¼Œ 'youden'ï¼Œ'accMAX'å››ç§
      
-        %Éè¶¨spµÄÖµÇóACC
+        %è®¾å®šspçš„å€¼æ±‚ACC
         if method=='sp0.99' 
-            sp_value=0.99 ;  %  sp=0.99£¬1-sp=FPR=0.01¡£
-            [~,position]=min(abs( fpr-(1-sp_value)));  %ÕÒµ½×î½Ó½üFPR_valueµÄÎ»ÖÃ
+            sp_value=0.99 ;  %  sp=0.99ï¼Œ1-sp=FPR=0.01ã€‚
+            [~,position]=min(abs( fpr-(1-sp_value)));  %æ‰¾åˆ°æœ€æ¥è¿‘FPR_valueçš„ä½ç½®
 
-        %Éè¶¨spµÄÖµÇóACC¡£ 
+        %è®¾å®šspçš„å€¼æ±‚ACCã€‚ 
         elseif method=='sp0.95'
-            sp_value=0.95 ;   % sp=0.95£¬1-sp=FPR=0.05¡£
-            [~,position]=min(abs( fpr-(1-sp_value)));  %ÕÒµ½×î½Ó½üFPR_valueµÄÎ»ÖÃ
+            sp_value=0.95 ;   % sp=0.95ï¼Œ1-sp=FPR=0.05ã€‚
+            [~,position]=min(abs( fpr-(1-sp_value)));  %æ‰¾åˆ°æœ€æ¥è¿‘FPR_valueçš„ä½ç½®
 
-        %ÓÃYoudenÔ¼µÇÖ¸Êı¶¨ãĞÖµ
+        %ç”¨Youdençº¦ç™»æŒ‡æ•°å®šé˜ˆå€¼
         elseif method=='youden'
-            [~,position]=max(abs(tpr-fpr));  %ÓÃÔ¼µÇÖ¸Êı¶¨ãĞÖµ,¼´µ±TPR-FPRÈ¡×î´óÖµÊ±¡£
+            [~,position]=max(abs(tpr-fpr));  %ç”¨çº¦ç™»æŒ‡æ•°å®šé˜ˆå€¼,å³å½“TPR-FPRå–æœ€å¤§å€¼æ—¶ã€‚
 
-        %ÓÃACC×î´óÖµ¶¨ãĞÖµ
+        %ç”¨ACCæœ€å¤§å€¼å®šé˜ˆå€¼
         elseif method=='accMAX'
             [~,position]=max(ACC); 
         
 
-        %ÓÃACC×î´óÖµ¶¨ãĞÖµ
+        %ç”¨ACCæœ€å¤§å€¼å®šé˜ˆå€¼
         elseif method=='f1sMAX'
             [~,position]=max(F1_score);
         end
         
-        %£¨Ò»°ã²»ÓÃ£©ÇóÌØ¶¨ãĞÖµµÄACC
-        %thre_value=0.05;  %Éè¶¨ãĞÖµµÄÖµÇóACC
+        %ï¼ˆä¸€èˆ¬ä¸ç”¨ï¼‰æ±‚ç‰¹å®šé˜ˆå€¼çš„ACC
+        %thre_value=0.05;  %è®¾å®šé˜ˆå€¼çš„å€¼æ±‚ACC
         %[~,position]=min(abs(thresholds-thre_value));
 
-    %% Çóµ±Ç°ãĞÖµµÄACCµÈ½á¹û
-    thre=thresholds(position); %Çóµ±Ç°ãĞÖµ
-    TP=count1*tpr(position);  %TP£ºÕæÑôÀà¸öÊı¡£
-    FP=count0*fpr(position);  %FP£º¼ÙÑôÀà¸öÊı¡£
+    %% æ±‚å½“å‰é˜ˆå€¼çš„ACCç­‰ç»“æœ
+    thre=thresholds(position); %æ±‚å½“å‰é˜ˆå€¼
+    TP=count1*tpr(position);  %TPï¼šçœŸé˜³ç±»ä¸ªæ•°ã€‚
+    FP=count0*fpr(position);  %FPï¼šå‡é˜³ç±»ä¸ªæ•°ã€‚
     FN=count1-TP;
     TN=count0-FP;
 
-    %% Çó½á¹û£ºPRE/SEN/ACC/F1_score/MCC
-    PRE=TP/(TP+FP)  ;  %¾«È·ÂÊPRE=TP/TP+FP
-    SEN=tpr(position); %Ãô¸Ğ¶ÈSEM=ÕæÑôÂÊTPR        %»òÕßSEN=TP/(count1)
-    ACC= (TP+count0-FP)/(count1+count0);  %×¼È·ÂÊACC=(TP+TN)/all=(ÕæÑô+ÕæÒõ)/all  ,ÕæÒõTN=count0-¼ÙÑôFP
-    F1_score=2*TP/(count1+TP);  %F1·ÖÊı=2P*R/(P+R)£¬¾«È·ÂÊP £¬Ãô¸Ğ¶ÈR
+    %% æ±‚ç»“æœï¼šPRE/SEN/ACC/F1_score/MCC
+    PRE=TP/(TP+FP)  ;  %ç²¾ç¡®ç‡PRE=TP/TP+FP
+    SEN=tpr(position); %æ•æ„Ÿåº¦SEM=çœŸé˜³ç‡TPR        %æˆ–è€…SEN=TP/(count1)
+    ACC= (TP+count0-FP)/(count1+count0);  %å‡†ç¡®ç‡ACC=(TP+TN)/all=(çœŸé˜³+çœŸé˜´)/all  ,çœŸé˜´TN=count0-å‡é˜³FP
+    F1_score=2*TP/(count1+TP);  %F1åˆ†æ•°=2P*R/(P+R)ï¼Œç²¾ç¡®ç‡P ï¼Œæ•æ„Ÿåº¦R
     MCC=(TP*TN -FP*FN)/sqrt(count1*count0*(TP+FP)*(FN+TN));
-    fprintf([ method,'£ºACC=',num2str(ACC), '   PRE=',num2str(PRE), '   SEN=',num2str(SEN), '  F1 score=',num2str(F1_score), '   MCC=',num2str(MCC),  '\n']);
+    fprintf([ method,'ï¼šACC=',num2str(ACC), '   PRE=',num2str(PRE), '   SEN=',num2str(SEN), '  F1 score=',num2str(F1_score), '   MCC=',num2str(MCC),  '\n']);
     
-    %auc=roc_1(output(:),original(:),'red') %¿´Ò»ÏÂROC
+    %auc=roc_1(output(:),original(:),'red') %çœ‹ä¸€ä¸‹ROC
     end
     
     
     
 %%
-    %%µ÷ÓÃmyACC_1ÇóACC¡¢F1_scoreµÈµÄÎåÖÖ·½·¨Ê¾·¶ %  methodÓĞ'sp0.99'£¬'sp0.95'£¬ 'youden'£¬'accMAX' 'f1MAX'ÎåÖÖ
+    %%è°ƒç”¨myACC_1æ±‚ACCã€F1_scoreç­‰çš„äº”ç§æ–¹æ³•ç¤ºèŒƒ %  methodæœ‰'sp0.99'ï¼Œ'sp0.95'ï¼Œ 'youden'ï¼Œ'accMAX' 'f1MAX'äº”ç§
     %myACC_1(output,original,'sp0.99' );
     %myACC_1(output,original,'sp0.95' );
     %myACC_1(output,original,'youden' );
